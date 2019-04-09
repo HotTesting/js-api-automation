@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "es2018",
+      "inlineSourceMap": true,
+      "outDir": "./built",
+    },
+    "exclude": ["./node_modules/"]
+  }
+  
