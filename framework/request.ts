@@ -1,9 +1,22 @@
 import * as request from "request-promise-native";
 import { URL } from "url";
+import { CookieJar, RequestAPI, RequiredUriUrl, Response } from "request";
 
-export class Request {
-    protected client = request;
-    private options: request.OptionsWithUri;
+// Shortcut for request type
+type RequestClient<T> = RequestAPI<
+    request.RequestPromise<TypifiedResponse<T>>,
+    request.RequestPromiseOptions,
+    RequiredUriUrl
+>;
+
+// Own Response type to support typified bodies
+interface TypifiedResponse<T = any> extends Response {
+    body: T;
+}
+
+export class Request<T = any> {
+    protected client: RequestClient<T>;
+    protected options: request.OptionsWithUri;
 
     constructor(absoluteURL: string) {
         // initializing options object
@@ -17,7 +30,7 @@ export class Request {
             time: true, // For logging purposes
             resolveWithFullResponse: true, // To get full response, not just body
             followAllRedirects: true
-        });
+        }) as RequestClient<T>;
     }
 
     /**
@@ -43,12 +56,28 @@ export class Request {
      * Set jar with cookies for this request
      * @param cookiesJar
      */
-    public cookies(cookiesJar) {
+    public cookies(cookiesJar: CookieJar) {
         this.options.jar = cookiesJar;
         return this;
     }
 
-    public async send(): Promise<request.FullResponse> {
+    /**
+     * Set a token for Authentication Bearer header
+     * @param token string
+     */
+    public auth(token: string) {
+        this.options.auth = {
+            bearer: token
+        };
+        return this
+    }
+
+    public body(reqBody) {
+        this.options.body = reqBody;
+        return this;
+    }
+
+    public async send(): Promise<TypifiedResponse<T>> {
         // Sending request with collected options, will be merged with default params.
         let response = this.client(this.options);
         this.logResponse(response);
@@ -59,7 +88,9 @@ export class Request {
      * Helper function to print response
      * @param responsePromise
      */
-    private async logResponse(responsePromise: request.RequestPromise<any>) {
+    private async logResponse(
+        responsePromise: request.RequestPromise<TypifiedResponse<T>>
+    ) {
         try {
             let response = await responsePromise;
             console.log(

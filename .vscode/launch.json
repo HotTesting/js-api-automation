@@ -1,0 +1,36 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug",
+        "program": "${workspaceFolder}/node_modules/.bin/mocha",
+        "sourceMaps": true,
+        
+        "args": [
+          "--inspect=127.0.0.1:5858",
+          "./tests/users.ts",
+          "--opts",
+          "mocha.opts",
+          "--delay",
+          "--require",
+          "./.vscode/delayer.ts"
+          //"--grep",
+          //"test name here"
+        ],
+        "env": {
+          // "TS_NODE_FILES": "true",
+          "DEBUG": "1",
+          "API_URL": "http://ip-5236.sunline.net.ua:30020"
+        },
+        "port": 5858,
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      }
+    ]
+  }
+  

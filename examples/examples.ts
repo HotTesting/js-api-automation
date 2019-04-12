@@ -25,7 +25,7 @@ describe("HTTP", function() {
         console.log("Response", resp);
     });
 
-    it.only("file upload and download", async function() {
+    it("file upload and download", async function() {
         const formData = {
             my_file: fs.createReadStream(__dirname + "/cat.png")
         };
