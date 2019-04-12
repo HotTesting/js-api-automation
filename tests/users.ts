@@ -28,7 +28,7 @@ describe("User", function() {
         expect(typeof resp.id, resp.id).to.equal("string");
     });
 
-    it("creating new user should be sucessful", async function() {
+    it.only("creating new user should be sucessful", async function() {
         // login as admin
         let adminLoginResp = await request.post(
             "http://ip-5236.sunline.net.ua:30020/users/login",
@@ -51,9 +51,10 @@ describe("User", function() {
             {
                 headers: {
                     Authorization: `Bearer ${adminLoginResp.token}`
+                    
                 },
                 json: true,
-                body: {
+                body:{
                     username: faker.internet.userName(),
                     email: email,
                     password: email
@@ -63,6 +64,6 @@ describe("User", function() {
         expect(resp, JSON.stringify(resp))
             .to.be.an("object")
             .that.has.key("_id");
-        expect(typeof resp._id, resp._id).to.equal("string");
+        expect(typeof resp._id, resp._id).to.equal("number");
     });
 });

@@ -12,7 +12,7 @@ describe("HTTP", function() {
         console.log("Response", resp.body);
     });
 
-    it("headers", async function() {
+    it("query params", async function() {
         let resp = await new Request("https://httpbin.org/anything")
             .queryParameters({
                 test3: "test3"

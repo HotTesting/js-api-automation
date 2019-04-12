@@ -1,5 +1,9 @@
-import * as request from "request-promise-native";
+import * as requestPromise from "request-promise-native";
 import * as fs from "fs";
+let request = requestPromise.defaults({
+    json: true
+})
+
 
 describe("HTTP", function() {
     it("headers", async function() {
@@ -21,12 +25,13 @@ describe("HTTP", function() {
         console.log("Response", resp);
     });
 
-    it("file upload and download", async function() {
+    it.only("file upload and download", async function() {
         const formData = {
             my_file: fs.createReadStream(__dirname + "/cat.png")
         };
         let resp = await request.post("https://httpbin.org/anything", {
-            formData: formData
+            formData: formData,
+            json: false
         });
         fs.createWriteStream(__dirname + `/cat_new.txt`).write(resp);
         let parsed = JSON.parse(resp);
@@ -38,27 +43,19 @@ describe("HTTP", function() {
     });
 
     it("cookies", async function() {
-        let cookieJar = request.jar();
-        let loginResp = await request.get(
-            "https://httpbin.org/cookies/set",
-            {
-                json: true,
-                jar: cookieJar,
-                qs: {
-                    testCookie1: "first",
-                    testCookie2: "second",
-                }
+        let cookieJar = request.jar()
+        let requestWithCookies = request.defaults({
+            jar: cookieJar
+        });
+        let loginResp = await requestWithCookies.get("https://httpbin.org/cookies/set", {
+            qs: {
+                testCookie1: "first",
+                testCookie2: "second"
             }
-        );
+        });
         console.log(cookieJar);
         console.log(loginResp);
-        let currentUser = await request.get(
-            "https://httpbin.org/cookies",
-            {
-                json: true,
-                jar: cookieJar
-            }
-        );
+        let currentUser = await requestWithCookies.get("https://httpbin.org/cookies");
         console.log(currentUser);
     });
 
@@ -66,13 +63,12 @@ describe("HTTP", function() {
         // login as admin
         let loginResp = await request.post(
             "http://ip-5236.sunline.net.ua:30020/users/login",
-            {   
+            {
                 json: true,
                 body: {
                     email: "test@test.com",
                     password: "123456"
                 }
-                
             }
         );
         console.log(loginResp.headers);
@@ -82,7 +78,7 @@ describe("HTTP", function() {
             {
                 json: true,
                 auth: {
-                    'bearer': loginResp.token
+                    bearer: loginResp.token
                 }
             }
         );
