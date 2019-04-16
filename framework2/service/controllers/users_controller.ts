@@ -5,7 +5,7 @@ import { User } from "../models/User";
 import { CookieJar } from "request";
 
 export class Users extends Controller {
-    protected bearerToken: string;
+    bearerToken: string;
 
     constructor(BASE_URL?: string, cookieJar?, bearerToken?: string) {
         super(BASE_URL, cookieJar);

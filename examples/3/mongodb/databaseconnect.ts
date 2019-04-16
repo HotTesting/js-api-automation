@@ -13,6 +13,7 @@ async function promoteUserToAdmin(id: string) {
     // Query
     let result = await users.findOne({ _id: id });
     console.log(result);
+    users.find
     users.findOneAndUpdate({ _id: id }, { $set: { isAdmin: true } });
     await mongoose.connection.close();
 }
@@ -25,6 +26,7 @@ describe("Admin", function() {
             undefined,
             "ip-5236.sunline.net.ua"
         );
+        console.log('EMAIL', email)
         const resp = await new Request("http://localhost:8080/users/register")
             .method("POST")
             .body({

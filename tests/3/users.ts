@@ -66,7 +66,7 @@ describe("User", function() {
             loggedInModel.token
         );
 
-        let usrDetails = await adminUsersController.userDetailsByID(
+        const usrDetails = await adminUsersController.userDetailsByID(
             loggedInModel.id
         );
 

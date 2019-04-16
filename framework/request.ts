@@ -2,20 +2,9 @@ import * as request from "request-promise-native";
 import { URL } from "url";
 import { CookieJar, RequestAPI, RequiredUriUrl, Response } from "request";
 
-// Shortcut for request type
-type RequestClient<T> = RequestAPI<
-    request.RequestPromise<TypifiedResponse<T>>,
-    request.RequestPromiseOptions,
-    RequiredUriUrl
->;
 
-// Own Response type to support typified bodies
-interface TypifiedResponse<T> extends Response {
-    body: T;
-}
-
-export class Request<T = any> {
-    protected client: RequestClient<T>;
+export class Request {
+    protected client
     protected options: request.OptionsWithUri;
 
     constructor(absoluteURL: string) {
@@ -30,7 +19,7 @@ export class Request<T = any> {
             time: true, // For logging purposes
             resolveWithFullResponse: true, // To get full response, not just body
             followAllRedirects: true
-        }) as RequestClient<T>;
+        })
     }
 
     /**
@@ -66,9 +55,11 @@ export class Request<T = any> {
      * @param token string
      */
     public auth(token: string) {
-        this.options.auth = {
-            bearer: token
-        };
+        if (token) {
+            this.options.auth = {
+                bearer: token
+            };
+        }
         return this
     }
 
