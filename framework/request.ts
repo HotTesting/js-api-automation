@@ -10,7 +10,7 @@ type RequestClient<T> = RequestAPI<
 >;
 
 // Own Response type to support typified bodies
-interface TypifiedResponse<T = any> extends Response {
+interface TypifiedResponse<T> extends Response {
     body: T;
 }
 

@@ -63,13 +63,16 @@ export class Request<T = any> {
 
     /**
      * Set a token for Authentication Bearer header
+     * Do not set if token is not passed
      * @param token string
      */
     public auth(token: string) {
-        this.options.auth = {
-            bearer: token
-        };
-        return this
+        if (token) {
+            this.options.auth = {
+                bearer: token
+            };
+        }
+        return this;
     }
 
     public body(reqBody) {

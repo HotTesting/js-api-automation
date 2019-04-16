@@ -1,4 +1,4 @@
-import { Request } from "../framework/request";
+import { Request } from "../../framework/request";
 import * as faker from "faker";
 import { expect } from "chai";
 
@@ -79,17 +79,47 @@ describe("User", function() {
             .send();
 
         const userDetailsResp = await new Request(
-            `http://ip-5236.sunline.net.ua:30020/api/users/${
-                adminResp.body.id
-            }`
-        ).send();
+            `http://ip-5236.sunline.net.ua:30020/api/users/${adminResp.body.id}`
+        )
+            .auth(adminResp.body.token)
+            .send();
 
-        expect(userDetailsResp.body, JSON.stringify(userDetailsResp.body))
+        const usrDetails = userDetailsResp.body;
+        expect(usrDetails, JSON.stringify(usrDetails))
             .to.be.an("object")
-            .that.has.all.keys("_id");
+            .that.has.keys(
+                "_id",
+                "authenticationMethod",
+                "createdAt",
+                "emails",
+                "isAdmin",
+                "profile",
+                "services",
+                "username"
+            );
 
-        expect(typeof userDetailsResp.body._id, userDetailsResp.body).to.equal(
-            "string"
-        );
+        // console.log("USER", usrDetails);
+        expect(usrDetails._id, usrDetails).to.be.a("string");
+        expect(usrDetails.authenticationMethod, usrDetails)
+            .to.be.a("string")
+            .that.equals("password");
+        expect(usrDetails.profile, usrDetails)
+            .to.be.an("object")
+            .that.has.keys(
+                "boardView",
+                "templatesBoardId",
+                "cardTemplatesSwimlaneId",
+                "listTemplatesSwimlaneId",
+                "boardTemplatesSwimlaneId"
+            );
+        expect(usrDetails.emails, usrDetails).to.be.an("array").that.is.not
+            .empty;
+        expect(usrDetails.username, usrDetails).to.be.a("string").that.is.not
+            .empty;
+        expect(usrDetails.services, usrDetails)
+            .to.be.an("object")
+            .that.has.keys("password", "email", "resume");
+        expect(usrDetails.createdAt, usrDetails).to.be.a("string").that.is.not
+            .empty;
     });
 });
