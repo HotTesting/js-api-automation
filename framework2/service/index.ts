@@ -5,7 +5,7 @@ import { Users } from "./controllers/users_controller";
 export class API {
     readonly API_BASE_URL: string;
     readonly users: Users;
-    cookieJar: CookieJar;
+    readonly cookieJar: CookieJar;
 
     constructor(API_BASE_URL: string, cookieJar: CookieJar = request.jar()) {
         this.API_BASE_URL = API_BASE_URL;

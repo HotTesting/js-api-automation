@@ -1,4 +1,4 @@
 --require ts-node/register
 --slow 2000
 --timeout 5000
-examples/**/wrapper.ts
+examples/**/databaseconnect.ts

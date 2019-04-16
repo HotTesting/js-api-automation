@@ -1,4 +1,4 @@
-import { Request } from "../../request";
+import { Request } from "../../../framework/request";
 import { Controller } from "./controller";
 
 export class Users extends Controller {
