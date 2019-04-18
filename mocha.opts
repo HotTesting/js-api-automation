@@ -1,4 +1,4 @@
---require ts-node/register
+--require ./setup.js
 --slow 2000
 --timeout 5000
-tests/3_progress/users.ts
+tests/4/users_manual_validate.ts

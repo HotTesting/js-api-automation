@@ -1,9 +1,22 @@
 import * as request from "request-promise-native";
 import { URL } from "url";
+import { validateBodyFor } from "./RAMLvalidator";
 import { CookieJar, RequestAPI, RequiredUriUrl, Response } from "request";
 
-export class Request {
-    protected client;
+// Shortcut for request type
+type RequestClient<T> = RequestAPI<
+    request.RequestPromise<TypifiedResponse<T>>,
+    request.RequestPromiseOptions,
+    RequiredUriUrl
+>;
+
+// Own Response type to support typified bodies
+interface TypifiedResponse<T = any> extends Response {
+    body: T;
+}
+
+export class Request<T> {
+    protected client: RequestClient<T>;
     protected options: request.OptionsWithUri;
 
     constructor(absoluteURL: string) {
@@ -18,24 +31,24 @@ export class Request {
             time: true, // For logging purposes
             resolveWithFullResponse: true, // To get full response, not just body
             followAllRedirects: true
-        });
+        }) as RequestClient<T>;
     }
 
     /**
      * POST, GET supported
      * @param method method name string
      */
-    public method(method: "POST" | "GET"): Request {
+    public method(method: "POST" | "GET"): Request<T> {
         this.options.method = method;
         return this;
     }
 
-    public queryParameters(queryParameters: Object): Request {
+    public queryParameters(queryParameters: Object): Request<T> {
         this.options.qs = queryParameters;
         return this;
     }
 
-    public headers(headers: Object) {
+    public headers(headers: Object): Request<T> {
         this.options.headers = headers;
         return this;
     }
@@ -44,16 +57,17 @@ export class Request {
      * Set jar with cookies for this request
      * @param cookiesJar
      */
-    public cookies(cookiesJar: CookieJar) {
+    public cookies(cookiesJar: CookieJar): Request<T> {
         this.options.jar = cookiesJar;
         return this;
     }
 
     /**
      * Set a token for Authentication Bearer header
+     * Do not set if token is not passed
      * @param token string
      */
-    public auth(token: string) {
+    public auth(token: string): Request<T> {
         if (token) {
             this.options.auth = {
                 bearer: token
@@ -62,23 +76,25 @@ export class Request {
         return this;
     }
 
-    public body(reqBody) {
+    public body(reqBody): Request<T> {
         this.options.body = reqBody;
         return this;
     }
 
-    public async send() {
+    public async send(): Promise<TypifiedResponse<T>> {
         // Sending request with collected options, will be merged with default params.
         let response = this.client(this.options);
         this.logResponse(response);
-        return response;
+        return this.validateAgainstRAML(response)
     }
 
     /**
      * Helper function to print response
      * @param responsePromise
      */
-    private async logResponse(responsePromise) {
+    private async logResponse(
+        responsePromise: request.RequestPromise<TypifiedResponse<T>>
+    ) {
         try {
             let response = await responsePromise;
             console.log(
@@ -108,4 +124,26 @@ export class Request {
             }
         }
     }
+
+    private async validateAgainstRAML(response:request.RequestPromise<TypifiedResponse<T>>) {
+        let uri = null;
+        try {
+            const resp = await response;
+            uri = resp.request["href"].toString();
+
+            validateBodyFor(uri, resp.body, resp.request.method, resp.statusCode.toString());
+            // console.log(
+            //     `Validation against RAML documentation for ${uri} passed`
+            // );
+        } catch (error) {
+            console.error(
+                `Validation against RAML documentation for ${uri} FAILED`
+            );
+            error.response = response;
+            throw error;
+        }
+        return response;
+    }
 }
+
+// let resp = new Request<{ test: "test" }>("").send().then(data=> data.body.test)

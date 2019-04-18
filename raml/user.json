@@ -1,0 +1,108 @@
+{
+    "type": "object",
+    "properties": {
+        "_id": {
+            "type": "string"
+        },
+        "createdAt": {
+            "type": "string"
+        },
+        "services": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "object",
+                    "properties": {
+                        "bcrypt": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "email": {
+                    "type": "object",
+                    "properties": {
+                        "verificationTokens": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "token": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "when": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "resume": {
+                    "type": "object",
+                    "properties": {
+                        "loginTokens": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "when": {
+                                        "type": "string"
+                                    },
+                                    "hashedToken": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "username": {
+            "type": "string"
+        },
+        "emails": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "address": {
+                        "type": "string"
+                    },
+                    "verified": {
+                        "type": "boolean"
+                    }
+                }
+            }
+        },
+        "profile": {
+            "type": "object",
+            "properties": {
+                "boardView": {
+                    "type": "string"
+                },
+                "templatesBoardId": {
+                    "type": "string"
+                },
+                "cardTemplatesSwimlaneId": {
+                    "type": "string"
+                },
+                "listTemplatesSwimlaneId": {
+                    "type": "string"
+                },
+                "boardTemplatesSwimlaneId": {
+                    "type": "string"
+                }
+            }
+        },
+        "authenticationMethod": {
+            "type": "string"
+        },
+        "isAdmin": {
+            "type": "boolean"
+        }
+    }
+}
