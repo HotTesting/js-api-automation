@@ -1,0 +1,65 @@
+{
+  "consumer": {
+    "name": "MyConsumer"
+  },
+  "provider": {
+    "name": "MyProvider"
+  },
+  "interactions": [
+    {
+      "description": "a request for all dogs",
+      "providerState": "i have a list of dogs",
+      "request": {
+        "method": "GET",
+        "path": "/dogs",
+        "headers": {
+          "Accept": "application/json"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "dog": 1
+          },
+          {
+            "dog": 2
+          }
+        ]
+      }
+    },
+    {
+      "description": "a request for a single dog",
+      "providerState": "i have a list of dogs",
+      "request": {
+        "method": "GET",
+        "path": "/dogs/1",
+        "headers": {
+          "Accept": "application/json"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "dog": 1
+          },
+          {
+            "dog": 2
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

@@ -1,4 +1,4 @@
 --require ./setup.js
 --slow 2000
 --timeout 5000
-tests/4/users_manual_validate.ts
+tests/5/contract.ts

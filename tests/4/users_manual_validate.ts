@@ -8,10 +8,10 @@ const tokensSchema = {
     type: "object",
     properties: {
         token: {
-            type: "string"
+            type: "number"
         },
         tokenExpires: {
-            type: "string"
+            type: "number"
         },
         id: {
             type: "string"
@@ -81,5 +81,7 @@ describe("User", function() {
         );
         let usrDetailsSchema = require('../../raml/user.json')
         expect(usrDetails).to.be.jsonSchema(usrDetailsSchema);
+        expect(usrDetails.authenticationMethod, JSON.stringify(usrDetails))
+            .that.equals("password");
     });
 });

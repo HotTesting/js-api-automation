@@ -18,7 +18,9 @@
           "mocha.opts",
           "--delay",
           "--require",
-          "./.vscode/delayer.ts"
+          "./.vscode/delayer.ts",
+          "--timeout",
+          "60000"
           //"--grep",
           //"test name here"
         ],
