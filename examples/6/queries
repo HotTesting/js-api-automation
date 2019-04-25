@@ -1,0 +1,106 @@
+https://apis.guru/graphql-voyager/
+http://localhost:8080/graphql
+https://github.com/prisma/graphql-request
+
+
+
+# Arguments
+{
+  human(id: "1000") {
+    name
+    height(unit: FOOT)
+  }
+}
+
+
+# Aliases
+{
+  empireHero: hero(episode: EMPIRE) {
+    name
+  }
+  jediHero: hero(episode: JEDI) {
+    name
+  }
+}
+
+
+# Fragments
+{
+  leftComparison: hero(episode: EMPIRE) {
+    ...comparisonFields
+  }
+  rightComparison: hero(episode: JEDI) {
+    ...comparisonFields
+  }
+}
+
+fragment comparisonFields on Character {
+  name
+  appearsIn
+  friends {
+    name
+  }
+}
+
+
+# Query name (logging purposes)
+query HeroNameAndFriends {
+  hero {
+    name
+    friends {
+      name
+    }
+  }
+}
+
+# Mutation
+mutation CreateReviewForEpisode($ep: Episode!, $review: ReviewInput!) {
+  createReview(episode: $ep, review: $review) {
+    stars
+    commentary
+  }
+}
+
+# Mutation vars
+{
+  "ep": "JEDI",
+  "review": {
+    "stars": 1,
+    "commentary": "This is a shitty movie!"
+  }
+}
+
+
+# Errors structure example
+{
+  "errors": [
+    {
+      "message": "Name for character with ID 1002 could not be fetched.",
+      "locations": [ { "line": 6, "column": 7 } ],
+      "path": [ "hero", "heroFriends", 1, "name" ]
+    }
+  ],
+  "data": {
+    "hero": {
+      "name": "R2-D2",
+      "heroFriends": [
+        {
+          "id": "1000",
+          "name": "Luke Skywalker"
+        },
+        {
+          "id": "1002",
+          "name": null
+        },
+        {
+          "id": "1003",
+          "name": "Leia Organa"
+        }
+      ]
+    }
+  }
+}
+
+
+
+

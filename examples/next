@@ -1,0 +1,5 @@
+- automatic models generation from JSON schemas or graphql schema
+- performance metrics with Server Timing API - 
+https://blog.chromium.org/2018/02/chrome-65-beta-css-paint-api-and.html
+https://w3c.github.io/server-timing/#server-timing-for-automated-analytics
+- reusing API tests as performance tests

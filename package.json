@@ -33,6 +33,7 @@
     "request-promise-native": "^1.0.7",
     "ts-node": "^8.0.3",
     "typescript": "^3.4.2",
-    "uri-templates": "^0.2.0"
+    "uri-templates": "^0.2.0",
+    "graphql-request": "^1.8.2"
   }
 }
